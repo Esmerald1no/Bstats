@@ -2,7 +2,7 @@ import numpy as np
 import statsmodels.stats.power as smp
 import statsmodels.stats.multitest as smm
 from scipy import stats as st
-from Dist import dist
+from .Dist import dist
 from math import ceil
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
@@ -345,7 +345,7 @@ def anova_smthng_idk(*dists):
 
     #Pretty Sure this will work?
     i = 0
-    j = 1
+    j = 0
     for dst in dists:
         for k in range(dst.count):
             X[i+k] = j
@@ -360,6 +360,8 @@ def anova_smthng_idk(*dists):
     df.columns = ["y","X"]
     
     pseudo_code = "y ~ C(X)"
+
+    sm.add_constant(df)
 
     model = ols(pseudo_code, data=df).fit()
     print(model.summary())
