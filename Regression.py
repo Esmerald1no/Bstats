@@ -2,8 +2,8 @@ import numpy as np
 import scipy.optimize as so
 import scipy.stats as st
 import statsmodels.api as sm
+from statsmodels.formula.api import ols
 import pandas as pd
-from statsmodels.formula import OLS
 
 
 #Currently not working
@@ -75,3 +75,31 @@ def get_linreg_stats(data,x_columns,y_name):
 
 def one_way_anova_fstat(*dists):
     return st.f_oneway(*dists)
+
+def anova_smthng_idk(*dists):
+    #Pass Dist object not Dist.dist.
+
+    dist_list = [dst.dist for dst in dists]
+    dist_list   
+    y = np.concatenate(*dist_list)
+
+    X = np.empty_like(y.size)
+
+
+    i = 0
+    j = 0
+    for dst in dists:
+        X[i:][1] = j
+
+        i += dst.count-1
+        j += 1
+
+    df = pd.DataFrame((y,X), columns = ["y","X"])
+    
+    pseudo_code = "y ~ C(X)"
+
+    model = ols(pseudo_code, data=df).fit()
+    print(model.summary())
+    aov_table = sm.stats.anova_lm(model, typ=1)
+
+    print(aov_table)
