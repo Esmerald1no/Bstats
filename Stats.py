@@ -4,6 +4,9 @@ import statsmodels.stats.multitest as smm
 from scipy import stats as st
 from Bstats.Dist import dist
 from math import ceil
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+import pandas as pd
 
 def cp_zscore(a,val):
     return (a.cp_mean() - val)/a.cp_std()
@@ -320,3 +323,48 @@ def cp_bivar_cond_cdf(mean_a,mean_b,var_a,var_b,corr,x,y,flip_x = False):
         variance = (1-corr**2)*var_b
 
         return dist(type="gaussian",mu = mean, sigma = np.sqrt(variance)).dist.cdf(y)
+
+def one_way_anova_fstat(*dists):
+    return st.f_oneway(*dists)
+
+def omega_squared(aov):
+    mse = aov['sum_sq'][-1]/aov['df'][-1]
+    aov['omega_sq'] = 'NaN'
+    aov['omega_sq'] = (aov[:-1]['sum_sq']-(aov[:-1]['df']*mse))/(sum(aov['sum_sq'])+mse)
+    return aov
+
+def anova_smthng_idk(*dists):
+    #Pass Dist object not Dist.dist.
+
+    dist_list = [dst.dist for dst in dists]
+     
+    y = np.concatenate([*dist_list])
+
+    X = np.empty_like(y)
+
+
+    #Pretty Sure this will work?
+    i = 0
+    j = 0
+    for dst in dists:
+        for k in range(dst.count):
+            X[i+k] = j
+
+        i += dst.count
+        j += 1
+
+    df = pd.DataFrame([y,X])
+
+    df = df.transpose()
+
+    df.columns = ["y","X"]
+    
+    pseudo_code = "y ~ C(X)"
+
+    model = ols(pseudo_code, data=df).fit()
+    print(model.summary())
+    aov_table = sm.stats.anova_lm(model, typ=1)
+
+    aov_table = omega_squared(aov_table)
+
+    print(aov_table)
