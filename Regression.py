@@ -2,7 +2,6 @@ import numpy as np
 import scipy.optimize as so
 import scipy.stats as st
 import statsmodels.api as sm
-from statsmodels.formula.api import ols
 import pandas as pd
 
 

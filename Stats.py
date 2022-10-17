@@ -2,7 +2,7 @@ import numpy as np
 import statsmodels.stats.power as smp
 import statsmodels.stats.multitest as smm
 from scipy import stats as st
-from Bstats.Dist import dist
+from Dist import dist
 from math import ceil
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
@@ -345,7 +345,7 @@ def anova_smthng_idk(*dists):
 
     #Pretty Sure this will work?
     i = 0
-    j = 0
+    j = 1
     for dst in dists:
         for k in range(dst.count):
             X[i+k] = j
