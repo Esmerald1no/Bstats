@@ -342,6 +342,7 @@ def anova_smthng_idk(*dists):
 
     X = np.empty_like(y)
 
+    
 
     #Pretty Sure this will work?
     i = 0
@@ -354,18 +355,16 @@ def anova_smthng_idk(*dists):
         j += 1
 
     df = pd.DataFrame([y,X])
-
+    
     df = df.transpose()
 
     df.columns = ["y","X"]
-    
-    pseudo_code = "y ~ C(X)"
 
-    sm.add_constant(df)
+    pseudo_code = "y ~ C(X)"
 
     model = ols(pseudo_code, data=df).fit()
     print(model.summary())
-    aov_table = sm.stats.anova_lm(model, typ=1)
+    aov_table = sm.stats.anova_lm(model, typ=2)
 
     aov_table = omega_squared(aov_table)
 
