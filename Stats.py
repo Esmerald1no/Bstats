@@ -7,6 +7,8 @@ from math import ceil
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
 import pandas as pd
+import pingouin as pg
+from itertools import combinations
 
 def cp_zscore(a,val):
     return (a.cp_mean() - val)/a.cp_std()
@@ -100,6 +102,9 @@ def cp_2smp_cohen(known_values = False, **kwargs):
 
     return (a_mean-b_mean)/np.sqrt((((a_count - 1) * a_var) + (b_count - 1) * b_var)/(a_count +  b_count - 2))
 
+def multi_2smp_cohen(*dists):
+    return [cp_2smp_cohen(a=a,b=b) for a,b in combinations(dists,2)]
+
 def cp_comm_lang_eff(a,b):
     c = []
     for i in a:
@@ -182,12 +187,13 @@ def t_test_1_samp(a,val, *, type = "two-sided", ret_values = True, **kwargs):
     if ret_values:
         return [t_stat,p_val]
     else:
-        #TODO:Finish this to 
+        #TODO:Finish #2 this to look more like R stats thing
         alpha = kwargs.get("alpha")
         print()
 
 def t_test_paired(a,b, *, type = "two-sided", ret_values = True, **kwargs):
     t_stat,p_val = st.ttest_rel(a,b,alternative=type)
+    #TODO: #3 Add stats printout if not ret_values(t-test-paired)
 
     if ret_values:
         return [t_stat,p_val]
