@@ -158,7 +158,7 @@ def cp_stderr_mean_diff(a,b,known_var = False,**kwargs):
         return np.sqrt(a.cp_var()/a.count + b.cp_var()/b.count)
 
 
-def cp_tscore_diff_means(a,b,x:float,known_var = False,return_z = False,**kwargs):
+def cp_tscore_diff_means(a,b,x:float = 0,known_var = False,return_z = False,**kwargs):
     #x is the value to be tested, i.e mean1 - mean2 = x
 
     if known_var:
@@ -174,6 +174,8 @@ def cp_tscore_diff_means(a,b,x:float,known_var = False,return_z = False,**kwargs
     else:
         return (a.cp_mean()-b.cp_mean() - x)/np.sqrt(a.cp_var()/a.count + b.cp_var()/b.count)
 
+def cp_pval_diff_means(a,b):
+    return cp_pval(val = cp_tscore_diff_means(a=a,b=b), df= cp_df(a=a,b=b),two_sided=True)
 
 def t_test_ind(a,b, *, eq_var = True, type = "two-sided"):
     return st.ttest_ind(a,b,equal_var=eq_var,alternative=type)
@@ -198,7 +200,7 @@ def t_test_paired(a,b, *, type = "two-sided", ret_values = True, **kwargs):
     if ret_values:
         return [t_stat,p_val]
 
-
+#TODO: #4 This whole power function needs to be revaluated for numerical appx.
 def t_test_pwr(alpha:float = 0.05, power:float = 0.8, *, type:str = "two-sided", brute_force = False, effect_size = None,cp_power = False, **kwargs):
     #Type indicates the alternative hypothesis
     #options for type are 'two-sided', 'smaller'(than the indicated value), or 'larger'(than the indicated value.)
@@ -265,7 +267,6 @@ def t_test_pwr(alpha:float = 0.05, power:float = 0.8, *, type:str = "two-sided",
 def cp_tscore_paired(a:dist, val:float)->float:
     return (a.cp_mean() - val)/a.cp_std_err()
 
-
 def cp_shapiro_wilk(dist):
     stat, p_val = st.shapiro(dist)
     return stat, p_val
@@ -284,7 +285,6 @@ def p_adjust(p_values:list,alpha:float = 0.05,*,method:str = "bonferroni",**kwar
 
 def cp_barlett(*dists,alpha = 0.05):
     return st.bartlett(*dists)[1] > alpha
-
 
 def cp_bivar_cdf(dist,axis:str,val: float|list,ret_survival = False) -> float:
     #For this one, pass the actual Dist class instance as parameter, NOT Dist.dist
