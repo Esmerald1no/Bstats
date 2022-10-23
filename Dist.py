@@ -7,7 +7,7 @@ class dist:
         self.type = type
         self.name = name
         match type:
-            case "gaussian":
+            case "gaussian" | "g":
                 self.mu = kwargs.get("mu")
                 self.sigma = kwargs.get("sigma")
 
