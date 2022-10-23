@@ -105,7 +105,7 @@ def boxplot(dist,*,title:str = "",x_axis:str = "",y_axis:str = "",scatter=False,
     
     if scatter:
         for i in range(len(dist)):
-            plt.plt.scatter(i+1 + plt.np.random.random(dist[i].count) * widths/2 -widths/4, dist[i].dist,s=8,edgecolors="black",facecolors='none')
+            plt.scatter(i+1 + np.random.random(dist[i].count) * widths/2 -widths/4, dist[i].dist,s=8,edgecolors="black",facecolors='none')
 
     plt.title(title)
     plt.xlabel(x_axis)
