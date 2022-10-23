@@ -344,8 +344,8 @@ def omega_squared(aov):
         mse = aov.tail(1)["SS"]/aov.tail(1)["DF"]
         aov['omega_sq'] = 'NaN'
         a_sum = sum(aov['SS'])+mse
-        for i in range(len(aov["SS"]-1)):
-            aov['omega_sq'][i] = (aov["SS"][i] - aov["DF"][i]*mse)/a_sum
+        for i,row in aov.iterrows():
+            aov['omega_sq'][i] = (row["SS"] - row["DF"]*mse)/a_sum
     
     return aov
 
