@@ -1,6 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 import statsmodels.api as sm
+from statsmodels.graphics.factorplots import interaction_plot
 
 
 class Multi_Plot:
