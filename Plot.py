@@ -96,8 +96,16 @@ def histogram(dist,bins:str = None,title:str = "TITLE",x_axis:str = "X Axis",y_a
         plt.show()
 
 
-def boxplot(dist,title:str = "",x_axis:str = "",y_axis:str = "",**kwargs):
-    _dict = plt.boxplot(dist,**kwargs)
+def boxplot(dist,title:str = "",x_axis:str = "",y_axis:str = "",scatter=False,widths=0.5,**kwargs):
+    if type(dist) != list :
+        _dict = plt.boxplot(dist,widths=widths,**kwargs)
+    else:
+        _dict = plt.boxplot(x=[dst.dist for dst in dist],widths=widths)
+        plt.xticks(ticks=range(1,len(dist)+1),labels=[dst.name for dst in dist])
+    
+    if scatter:
+        for i in range(len(dist)):
+            plt.plt.scatter(i+1 + plt.np.random.random(dist[i].count) * w/2 -w/4, dist[i].dist,s=8,edgecolors="black",facecolors='none')
 
     plt.title(title)
     plt.xlabel(x_axis)
