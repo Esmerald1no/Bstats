@@ -335,9 +335,18 @@ def one_way_anova_fstat(*dists):
     return st.f_oneway(*dists)
 
 def omega_squared(aov):
-    mse = aov['sum_sq'][-1]/aov['df'][-1]
-    aov['omega_sq'] = 'NaN'
-    aov['omega_sq'] = (aov[:-1]['sum_sq']-(aov[:-1]['df']*mse))/(sum(aov['sum_sq'])+mse)
+    try:
+        mse = aov['sum_sq'][-1]/aov['df'][-1]
+        aov['omega_sq'] = 'NaN'
+        aov['omega_sq'] = (aov[:-1]['sum_sq']-(aov[:-1]['df']*mse))/(sum(aov['sum_sq'])+mse)
+    except KeyError:
+        #TODO: #6 This works, but output is horrid.
+        mse = aov.tail(1)["SS"]/aov.tail(1)["DF"]
+        aov['omega_sq'] = 'NaN'
+        a_sum = sum(aov['SS'])+mse
+        for i in range(len(aov["SS"]-1)):
+            aov['omega_sq'][i] = (aov["SS"][i] - aov["DF"][i]*mse)/a_sum
+    
     return aov
 
 def anova_smthng_idk(*dists):
