@@ -1,3 +1,4 @@
+from collections import defaultdict
 import numpy as np
 import statsmodels.stats.power as smp
 import statsmodels.stats.multitest as smm
@@ -375,3 +376,11 @@ def anova_smthng_idk(*dists):
     aov_table = omega_squared(aov_table)
 
     print(aov_table)
+
+#TODO: #5 Figure out how to implement this
+def dists_to_df(dists):
+    tmp_dict = defaultdict()
+    for dst in dists:
+        tmp_dict[dst.name] = []
+        for item in dst.dist:
+            tmp_dict[dst.name].append(item)
