@@ -98,7 +98,7 @@ def histogram(dist,bins:str = None,title:str = "TITLE",x_axis:str = "X Axis",y_a
 
 
 def boxplot(dist,*,title:str = "",x_axis:str = "",y_axis:str = "",scatter=False,widths=0.5,**kwargs):
-    if type(dist) != list :
+    if not isinstance(dist,list) :
         _dict = plt.boxplot(dist,widths=widths,**kwargs)
     else:
         _dict = plt.boxplot(x=[dst.dist for dst in dist],widths=widths)
