@@ -78,7 +78,7 @@ def cp_df(known_vals = False,**kwargs):
 def cp_1smp_cohen(a:dist,val:float)->float:
     return (a.cp_mean()-val)/a.cp_std()
 
-def cp_2smp_cohen(known_values = False, **kwargs):
+def cp_2smp_cohen(known_values = False, paired = False,**kwargs):
     if known_values:
         a_mean = kwargs.get("a_mean")
         b_mean = kwargs.get("b_mean")
@@ -101,10 +101,13 @@ def cp_2smp_cohen(known_values = False, **kwargs):
         a_var = a.cp_var()
         b_var = b.cp_var()
 
-    return (a_mean-b_mean)/np.sqrt((((a_count - 1) * a_var) + (b_count - 1) * b_var)/(a_count +  b_count - 2))
+    if not paired:
+        return (a_mean-b_mean)/np.sqrt((((a_count - 1) * a_var) + (b_count - 1) * b_var)/(a_count +  b_count - 2))
+    else:
+        return  np.mean(a.dist-b.dist)/st.tstd(a.dist-b.dist)
 
-def multi_2smp_cohen(*dists):
-    return [cp_2smp_cohen(a=a,b=b) for a,b in combinations(dists,2)]
+def multi_2smp_cohen(*dists, paired = False):
+    return [cp_2smp_cohen(a=a,b=b, paired=paired) for a,b in combinations(dists,2)]
 
 def cp_comm_lang_eff(a,b):
     c = []
@@ -202,7 +205,7 @@ def t_test_paired(a,b, *, type = "two-sided", ret_values = True, **kwargs):
         return [t_stat,p_val]
 
 #TODO: #4 This whole power function needs to be revaluated for numerical appx.
-def t_test_pwr(alpha:float = 0.05, power:float = 0.8, *, type:str = "two-sided", brute_force = False, effect_size = None,cp_power = False, **kwargs):
+def t_test_pwr(alpha:float = 0.05, power:float = 0.8, *, type:str = "two-sided", brute_force = False, effect_size = None,cp_power = False,statistic:str = "t",**kwargs):
     #Type indicates the alternative hypothesis
     #options for type are 'two-sided', 'smaller'(than the indicated value), or 'larger'(than the indicated value.)
     
