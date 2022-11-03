@@ -101,7 +101,7 @@ def boxplot(dist,*,title:str = "",x_axis:str = "",y_axis:str = "",scatter=False,
     if not isinstance(dist,list) :
         _dict = plt.boxplot(dist,widths=widths,**kwargs)
     else:
-        _dict = plt.boxplot(x=[dst.dist for dst in dist],widths=widths)
+        _dict = plt.boxplot(x=[dst.dist for dst in dist],widths=widths,**kwargs)
         plt.xticks(ticks=range(1,len(dist)+1),labels=[dst.name for dst in dist])
     
     if scatter:
