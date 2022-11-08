@@ -185,46 +185,80 @@ def plot_scatter(x,y,title:str = "",x_axis:str = "",y_axis:str = "",**kwargs):
 
     plt.show()
 
-def one_way_plot_restricted_model(dist,*,title:str = "Restricted",x_axis:str = "index",y_axis:str = "Y",linestyle = "--",**kwargs):
-    #For this question pass the Dist object not Dist.dist
+def one_way_plot_restricted_model(*dist,title:str = "Restricted",x_axis:str = "index",y_axis:str = "Y",linestyle = "--", type:str = "ANOVA" ,**kwargs):
+    #For this function pass the Dist object not Dist.dist
 
 
-    mean = dist.cp_mean()
-    plt.axhline(y=mean,xmin=0,xmax=dist.count,color="black")
-    for i in range(dist.count):
-        y_i = dist.dist[i]
+    if type == "ANOVA":
+        mean = dist.cp_mean()
+        plt.axhline(y=mean,xmin=0,xmax=dist.count,color="black")
+        for i in range(dist.count):
+            y_i = dist.dist[i]
 
-        if y_i < mean:
-            plt.vlines(i,ymin=y_i,ymax=mean,linestyle = linestyle, colors = "black")
-        elif y_i > mean:
-            plt.vlines(i,ymin=mean,ymax=y_i,linestyle = linestyle, colors="black")
+            if y_i < mean:
+                plt.vlines(i,ymin=y_i,ymax=mean,linestyle = linestyle, colors = "black")
+            elif y_i > mean:
+                plt.vlines(i,ymin=mean,ymax=y_i,linestyle = linestyle, colors="black")
 
-    plt.scatter(range(dist.count),dist.dist,**kwargs)
+        plt.scatter(range(dist.count),dist.dist,**kwargs)
     
+    elif type == "ANCOVA":
+        #For ANCOVA, *dists should be a list of different treatment group(s)
+        #in **kwargs there should be one covariate distribution for each group in *dists under a variable "covariates"
+        covariates = kwargs.get("covariates")
+
+        if len(dists) != len(covariates):
+            raise(IndexError("Insuficient Covariates for number of Groups."))
+
+        y = np.concatenate([covariates])
+        x = np.arrange(y.size)
+
+        slopes = sm.OLS(x,y).fit().params
+
     plt.title(title)
     plt.xlabel(x_axis)
     plt.ylabel(y_axis)
 
     plt.show()
 
-def one_way_plot_full_model(*dists,title:str = "Full",x_axis:str = "index",y_axis:str = "Y",linestyle = "--"):
+def one_way_plot_full_model(*dists,title:str = "Full",x_axis:str = "index",y_axis:str = "Y",linestyle = "--", type = "ANOVA",**kwargs):
     #For this question pass the Dist object not Dist.dist
 
-    j = 1
-    for dist in dists:
-        mean = dist.cp_mean()
-        plt.hlines(y=mean,xmin=j-1,xmax=dist.count+j-1,color="black")
-        for i in range(dist.count):
-            y_i = dist.dist[i]
+    if type == "ANOVA":
+        j = 1
+        for dist in dists:
+            mean = dist.cp_mean()
+            plt.hlines(y=mean,xmin=j-1,xmax=dist.count+j-1,color="black")
+            for i in range(dist.count):
+                y_i = dist.dist[i]
 
-            if y_i < mean:
-                plt.vlines(i+j-1,ymin=y_i,ymax=mean,linestyle = linestyle, colors = "black")
-            elif y_i > mean:
-                plt.vlines(i+j-1,ymin=mean,ymax=y_i,linestyle = linestyle, colors="black")
+                if y_i < mean:
+                    plt.vlines(i+j-1,ymin=y_i,ymax=mean,linestyle = linestyle, colors = "black")
+                elif y_i > mean:
+                    plt.vlines(i+j-1,ymin=mean,ymax=y_i,linestyle = linestyle, colors="black")
 
-        plt.scatter(range(j-1, dist.count + j - 1), dist.dist, label=dist.name, alpha=0.8)
+            plt.scatter(range(j-1, dist.count + j - 1), dist.dist, label=dist.name, alpha=0.8)
 
-        j += dist.count
+            j += dist.count
+    elif type == "ANCOVA":
+        #For ANCOVA, *dists should be a list of different treatment group(s)
+        #in **kwargs there should be one covariate distribution for each group in *dists under a variable "covariates"
+        covariates = kwargs.get("covariates")
+
+        if len(dists) != len(covariates):
+            raise(IndexError("Insuficient Covariates for number of Groups."))
+
+        y = np.concatenate([covariates])
+        x = np.arrange(y.size)
+
+        slopes = sm.OLS(x,y).fit().params
+
+        for dst,cov in zip(dists,covariates):
+
+            
+            pass
+        
+    
 
     plt.legend()
 
