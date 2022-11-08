@@ -205,13 +205,16 @@ def one_way_plot_restricted_model(*dist,title:str = "Restricted",x_axis:str = "i
     elif type == "ANCOVA":
         #For ANCOVA, *dists should be a list of different treatment group(s)
         #in **kwargs there should be one covariate distribution for each group in *dists under a variable "covariates"
-        covariates = kwargs.get("covariates")
+        def line(x,a,b=0):
+            return a*x+b
+
+        covariates = kwargs.pop("covariates")
 
         if len(*dist) != len(covariates):
             raise(IndexError("Insuficient Covariates for number of Groups."))
 
-        y = np.concatenate([cov.dist for cov in covariates])
-        x = np.arange(y.size)
+        y = np.concatenate([dst.dist for dst in dist])
+        x = np.concatenate([cov.dist for cov in covariates])
 
         model = sm.OLS(x,y).fit()
         slope = model.params
