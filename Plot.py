@@ -207,7 +207,7 @@ def one_way_plot_restricted_model(*dist,title:str = "Restricted",x_axis:str = "i
         #in **kwargs there should be one covariate distribution for each group in *dists under a variable "covariates"
         covariates = kwargs.get("covariates")
 
-        if len(dists) != len(covariates):
+        if len(dist) != len(covariates):
             raise(IndexError("Insuficient Covariates for number of Groups."))
 
         y = np.concatenate([covariates])
