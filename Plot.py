@@ -213,7 +213,7 @@ def one_way_plot_restricted_model(*dist,title:str = "Restricted",x_axis:str = "i
         if len(*dist) != len(covariates):
             raise(IndexError("Insuficient Covariates for number of Groups."))
 
-        y = np.concatenate([dst.dist for dst in dist])
+        y = np.concatenate([dst.dist for dst in dist[0]])
         x = np.concatenate([cov.dist for cov in covariates])
 
         model = sm.OLS(x,y).fit()
