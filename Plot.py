@@ -210,9 +210,13 @@ def one_way_plot_restricted_model(*dist,title:str = "Restricted",x_axis:str = "i
         if len(*dist) != len(covariates):
             raise(IndexError("Insuficient Covariates for number of Groups."))
 
-        y = np.concatenate([covariates])
-        x = np.arrange(y.size)
+        y = np.concatenate([cov.dist for cov in covariates])
+        x = np.arange(y.size)
 
+        model = sm.OLS(x,y).fit()
+        slopes = model.params
+
+        
         slopes = sm.OLS(x,y).fit().params
 
     plt.title(title)
