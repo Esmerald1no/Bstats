@@ -216,11 +216,23 @@ def one_way_plot_restricted_model(*dist,title:str = "Restricted",x_axis:str = "i
         y = np.concatenate([dst.dist for dst in dist[0]])
         x = np.concatenate([cov.dist for cov in covariates])
 
+        mean = np.mean(y)
+
         model = sm.OLS(x,y).fit()
         slope = model.params
 
-        
-        slopes = sm.OLS(x,y).fit().params
+        plt.plot([x.min(),x.max()],[line(x.min(),slope[0],mean),line(x.max(),slope[0],mean)], linestyle ="--", marker = "none")
+
+        plt.scatter(x,y,*kwargs)
+
+        for i in range(y.size):
+            y_i = y[i]
+            y_reg = line(x[i],slope[0],mean)
+
+            if y_i < y_reg:
+                plt.vlines(x[i],ymin=y_i,ymax=y_reg,linestyle = linestyle, colors = "black", alpha = 0.3)
+            elif y_i > mean:
+                plt.vlines(x[i],ymin=y_reg,ymax=y_i,linestyle = linestyle, colors="black", alpha = 0.3)
 
     plt.title(title)
     plt.xlabel(x_axis)
