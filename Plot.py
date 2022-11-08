@@ -214,7 +214,7 @@ def one_way_plot_restricted_model(*dist,title:str = "Restricted",x_axis:str = "i
         x = np.arange(y.size)
 
         model = sm.OLS(x,y).fit()
-        slopes = model.params
+        slope = model.params
 
         
         slopes = sm.OLS(x,y).fit().params
