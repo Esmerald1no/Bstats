@@ -262,7 +262,7 @@ def one_way_plot_full_model(*dists,title:str = "Full",x_axis:str = "index",y_axi
     elif type == "ANCOVA":
         #For ANCOVA, *dists should be a list of different treatment group(s)
         #in **kwargs there should be one covariate distribution for each group in *dists under a variable "covariates"
-        covariates = kwargs.get("covariates")
+        covariates = kwargs.pop("covariates")
 
         if len(dists) != len(covariates):
             raise(IndexError("Insuficient Covariates for number of Groups."))
