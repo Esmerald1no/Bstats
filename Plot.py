@@ -169,6 +169,9 @@ def plot_dist_scatter(dist,title:str = "",x_axis:str = "",y_axis:str = "",**kwar
 
     fig = plt.scatter(data[:,0],data[:,1],**kwargs)
 
+    if legend != None:
+        fig.set_label(legend)
+
     plt.title(title)
     plt.xlabel(x_axis)
     plt.ylabel(y_axis)
