@@ -143,13 +143,14 @@ def plot_pdf(dist,title:str = "",x_axis:str = "x",y_axis:str = "Probability",**k
 def plot_cdf(dist,title:str = "",x_axis:str = "",y_axis:str = "Probability",**kwargs):
     x = np.linspace(dist.cp_mean() - 4*dist.cp_std(), dist.cp_mean() + 4*dist.cp_std(), 100)
 
-    plt.plot(x, dist.cdf(x),**kwargs)
+    fig = plt.plot(x, dist.cdf(x),**kwargs)
 
     plt.title(title)
     plt.xlabel(x_axis)
     plt.ylabel(y_axis)
 
     plt.show()
+    return fig
 
 
 def plot_qq(dist,line = "s",title:str = "",x_axis:str = "",y_axis:str = "",**kwargs):
@@ -164,10 +165,15 @@ def plot_qq(dist,line = "s",title:str = "",x_axis:str = "",y_axis:str = "",**kwa
 
     plt.show()
 
-def plot_dist_scatter(dist,title:str = "",x_axis:str = "",y_axis:str = "",**kwargs):
+    return fig
+
+def plot_dist_scatter(dist,title:str = "",x_axis:str = "",y_axis:str = "",legend:str = None,**kwargs):
     data = dist
 
-    fig = plt.scatter(data[:,0],data[:,1],**kwargs)
+    if len(data.shape) == 1:
+        fig = plt.scatter(range(data.size),data,**kwargs)
+    else:
+        fig = plt.scatter(data[:,0],data[:,1],**kwargs)
 
     if legend != None:
         fig.set_label(legend)
@@ -178,6 +184,8 @@ def plot_dist_scatter(dist,title:str = "",x_axis:str = "",y_axis:str = "",**kwar
 
     plt.show()
 
+    return fig
+
 def plot_scatter(x,y,title:str = "",x_axis:str = "",y_axis:str = "",**kwargs):
 
     fig = plt.scatter(x,y,**kwargs)
@@ -187,6 +195,8 @@ def plot_scatter(x,y,title:str = "",x_axis:str = "",y_axis:str = "",**kwargs):
     plt.ylabel(y_axis)
 
     plt.show()
+
+    return fig
 
 def one_way_plot_restricted_model(*dist,title:str = "Restricted",x_axis:str = "index",y_axis:str = "Y",linestyle = "--", type:str = "ANOVA" ,**kwargs):
     #For this function pass the Dist object not Dist.dist
@@ -273,7 +283,8 @@ def one_way_plot_full_model(*dists,title:str = "Full",x_axis:str = "index",y_axi
         y = np.concatenate([covariates])
         x = np.arrange(y.size)
 
-        slopes = sm.OLS(x,y).fit().params
+        model = sm.OLS(x,y).fit()
+        slopes = model.params
 
         for dst,cov in zip(dists,covariates):
 
