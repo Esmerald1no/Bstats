@@ -115,7 +115,7 @@ def boxplot(dist,*,title:str = "",x_axis:str = "",y_axis:str = "",scatter=False,
     plt.show()
 
 
-def plot(x,y,title:str = "",x_axis:str = "x",y_axis:str = "y",**kwargs):
+def plot(x,y,title:str = "",x_axis:str = "x",y_axis:str = "y",ret_fig:bool = False, **kwargs):
 
     plt.plot(x,y,**kwargs)
 
@@ -123,10 +123,11 @@ def plot(x,y,title:str = "",x_axis:str = "x",y_axis:str = "y",**kwargs):
     plt.xlabel(x_axis)
     plt.ylabel(y_axis)
 
-    plt.show()
+    if not ret_fig:
+        plt.show()
 
 
-def plot_pdf(dist,title:str = "",x_axis:str = "x",y_axis:str = "Probability",**kwargs):
+def plot_pdf(dist,title:str = "",x_axis:str = "x",y_axis:str = "Probability",ret_fig:bool = False, **kwargs):
     x = np.linspace(dist.cp_mean() - 4*dist.cp_std(), dist.cp_mean() + 4*dist.cp_std(), 100)
 
     plt.plot(x, dist.pdf(x),**kwargs)
@@ -137,10 +138,11 @@ def plot_pdf(dist,title:str = "",x_axis:str = "x",y_axis:str = "Probability",**k
     plt.xlabel(x_axis)
     plt.ylabel(y_axis)
 
-    plt.show()
+    if not ret_fig:
+        plt.show()
 
 
-def plot_cdf(dist,title:str = "",x_axis:str = "",y_axis:str = "Probability",**kwargs):
+def plot_cdf(dist,title:str = "",x_axis:str = "",y_axis:str = "Probability",ret_fig:bool = False,**kwargs):
     x = np.linspace(dist.cp_mean() - 4*dist.cp_std(), dist.cp_mean() + 4*dist.cp_std(), 100)
 
     fig = plt.plot(x, dist.cdf(x),**kwargs)
@@ -149,11 +151,12 @@ def plot_cdf(dist,title:str = "",x_axis:str = "",y_axis:str = "Probability",**kw
     plt.xlabel(x_axis)
     plt.ylabel(y_axis)
 
-    plt.show()
+    if not ret_fig:
+        plt.show()
     return fig
 
 
-def plot_qq(dist,line = "s",title:str = "",x_axis:str = "",y_axis:str = "",**kwargs):
+def plot_qq(dist,line = "s",title:str = "",x_axis:str = "",y_axis:str = "",ret_fig:bool = False,**kwargs):
 
     data = dist
 
@@ -163,11 +166,12 @@ def plot_qq(dist,line = "s",title:str = "",x_axis:str = "",y_axis:str = "",**kwa
     plt.xlabel(x_axis)
     plt.ylabel(y_axis)
 
-    plt.show()
+    if not ret_fig:
+        plt.show()
 
     return fig
 
-def plot_dist_scatter(dist,title:str = "",x_axis:str = "",y_axis:str = "",legend:str = None,**kwargs):
+def plot_dist_scatter(dist,title:str = "",x_axis:str = "",y_axis:str = "",legend:str = None,ret_fig:bool = False,**kwargs):
     data = dist
 
     if len(data.shape) == 1:
@@ -182,11 +186,12 @@ def plot_dist_scatter(dist,title:str = "",x_axis:str = "",y_axis:str = "",legend
     plt.xlabel(x_axis)
     plt.ylabel(y_axis)
 
-    plt.show()
+    if not ret_fig:
+        plt.show()
 
     return fig
 
-def plot_scatter(x,y,title:str = "",x_axis:str = "",y_axis:str = "",**kwargs):
+def plot_scatter(x,y,title:str = "",x_axis:str = "",y_axis:str = "",ret_fig:bool = False,**kwargs):
 
     fig = plt.scatter(x,y,**kwargs)
 
@@ -194,7 +199,8 @@ def plot_scatter(x,y,title:str = "",x_axis:str = "",y_axis:str = "",**kwargs):
     plt.xlabel(x_axis)
     plt.ylabel(y_axis)
 
-    plt.show()
+    if not ret_fig:
+        plt.show()
 
     return fig
 
