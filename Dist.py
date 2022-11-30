@@ -67,33 +67,43 @@ class dist:
     def cp_cov_mat(a_var,b_var,corr):
         return np.array([[a_var,corr*np.sqrt(a_var*b_var)],[corr*np.sqrt(a_var*b_var),b_var]])
 
+    @property
     def cp_mean(self):
         return np.mean(self.dist)
     
+    @property
     def cp_median(self):
         return np.median(self.dist)
     
+    @property
     def cp_mode(self):
         return st.mode(self.dist,keepdims=False)[0]
     
+    @property
     def cp_quartiles(self):
         return np.percentile(self.dist,[0,25,50,75,100])
-    
+
+    @property
     def cp_iqr(self):
         return st.iqr(self.dist)
     
+    @property
     def cp_range(self):
         return np.ptp(self.dist)
     
+    @property
     def cp_var(self):
         return st.tvar(self.dist)
 
+    @property
     def cp_std(self):
         return st.tstd(self.dist)
 
+    @property
     def cp_std_err(self):
         return st.tsem(self.dist)
 
+    @property
     def cp_coef_var(self):
         return st.variation(self.dist,ddof=1)
 
