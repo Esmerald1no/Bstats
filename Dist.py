@@ -99,30 +99,37 @@ class dist:
 
     @property
     def cp_mode(self):
+        if type(self.dist) == np.ndarray: raise NotAvailableError
         return st.mode(self.dist,keepdims=False)[0]
     
     @property
     def cp_quartiles(self):
+        if type(self.dist) == np.ndarray: raise NotAvailableError
         return np.percentile(self.dist,[0,25,50,75,100])
 
     @property
     def cp_iqr(self):
+        if type(self.dist) == np.ndarray: raise NotAvailableError
         return st.iqr(self.dist)
     
     @property
     def cp_range(self):
+        if type(self.dist) == np.ndarray: raise NotAvailableError
         return np.ptp(self.dist)
     
     @property
     def cp_var(self):
+        if type(self.dist) == np.ndarray: raise NotAvailableError
         return st.tvar(self.dist)
 
     @property
     def cp_std_err(self):
+        if type(self.dist) == np.ndarray: raise NotAvailableError
         return st.tsem(self.dist)
 
     @property
     def cp_coef_var(self):
+        if type(self.dist) == np.ndarray: raise NotAvailableError
         return st.variation(self.dist,ddof=1)
 
     def compute_internals(self):
