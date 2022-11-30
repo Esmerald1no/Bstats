@@ -67,14 +67,31 @@ class dist:
     def cp_cov_mat(a_var,b_var,corr):
         return np.array([[a_var,corr*np.sqrt(a_var*b_var)],[corr*np.sqrt(a_var*b_var),b_var]])
 
+    #Methods Abaliable for Continuous Distributions and Arrays:
+
     @property
     def cp_mean(self):
-        return np.mean(self.dist)
+        if type(self.dist) == np.ndarray:
+            return np.mean(self.dist)
+        else:
+            return self.dist.mean()
     
     @property
     def cp_median(self):
-        return np.median(self.dist)
+        if type(self.dist) == np.ndarray:
+            return np.median(self.dist)
+        else:
+            return self.dist.median()
+
+    @property
+    def cp_std(self):
+        if type(self.dist) == np.ndarray:
+            return st.tstd(self.dist)
+        else:
+            return self.dist.std()
     
+    #Methods NOT available to Continuous Distributions, only Arrays.
+
     @property
     def cp_mode(self):
         return st.mode(self.dist,keepdims=False)[0]
