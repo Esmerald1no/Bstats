@@ -3,7 +3,6 @@ import numpy as np
 
 class NotAvailableError(Exception):
     """Raised when using an unsupported function on a Continuous Distrinution"""
-    print("This Function is not Available to Continuous Distributions.")
     pass
 
 class dist:
