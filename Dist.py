@@ -118,10 +118,6 @@ class dist:
         return st.tvar(self.dist)
 
     @property
-    def cp_std(self):
-        return st.tstd(self.dist)
-
-    @property
     def cp_std_err(self):
         return st.tsem(self.dist)
 
