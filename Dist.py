@@ -1,6 +1,11 @@
 from scipy import stats as st
 import numpy as np
 
+class NotAvailable(Exception):
+    """Raised when using an unsupported function on a Continuous Distrinution"""
+    print("This Function is not Available to Continuous Distributions.")
+    pass
+
 class dist:
     
     def __init__(self,obj = None,type:str = None,name:str = "",**kwargs) -> None:
