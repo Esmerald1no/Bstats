@@ -55,15 +55,15 @@ class dist:
 
 
     class b_dist:
-        def __init__(self,alpha,beta) -> None:
+        def __init__(self,alpha:float,beta:float) -> None:
             self.bdist = st.beta(alpha,beta)
 
     class bivar_g_dist:
-        def __init__(self,a_mean,b_mean,a_var,b_var,corr) -> None:
+        def __init__(self,a_mean:float,b_mean:float,a_var:float,b_var:float,corr:float) -> None:
             self.bivar_gdist = st.multivariate_normal(mean=np.array([a_mean,b_mean]),cov=dist.cp_cov_mat(a_var,b_var,corr))
 
     class paired_dist:
-        def __init__(self,a,b) -> None:
+        def __init__(self,a:np.ndarray,b:np.ndarray) -> None:
             self.paired_dist = np.array([j-i for i,j in zip(a,b)])
             
 
