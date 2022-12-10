@@ -71,6 +71,26 @@ class dist:
     def cp_cov_mat(a_var,b_var,corr):
         return np.array([[a_var,corr*np.sqrt(a_var*b_var)],[corr*np.sqrt(a_var*b_var),b_var]])
 
+    @staticmethod
+    def sample(dist_type:str, size:int, **dist_params):
+        #Prefered sampling method over dist.rvs()
+        #Use this method if you are sampling often or using while/for loops
+
+        match dist_type.lower():
+            case ("gaussian"|"normal"):
+                return st.norm.rvs(dist_params.get("mu"), dist_params.get("sigma"), size = size)
+            case "beta":
+                return st.beta.rvs(dist_params.get("alpha"), dist_params.get("beta"), size = size)
+            case "gamma":
+                return st.gamma.rvs(dist_params.get("alpha"), dist_params.get("beta"), size = size)
+            case ("bivar_gaussian"|"bivar_normal"):
+                a_mean = dist_params.get("a_mean")
+                b_mean = dist_params.get("b_mean")
+                a_var = dist_params.get("a_var")
+                b_var = dist_params.get("b_var")
+                corr = dist_params.get("corr")
+                return st.multivariate_normal.rvs(mean=[a_mean,b_mean],cov=dist.cp_cov_mat(a_var,b_var,corr), size = size)
+
     #Methods Abaliable for Continuous Distributions and Arrays:
 
     @property
