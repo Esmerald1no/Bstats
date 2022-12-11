@@ -1,5 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib.image import NonUniformImage
 import statsmodels.api as sm
 from statsmodels.graphics.factorplots import interaction_plot
 
@@ -79,22 +80,40 @@ class Multi_Plot:
 # argument so that the function can now add the output figure to the Multi_Plot. 
 
 
-def histogram(dist,bins:str = None,title:str = "TITLE",x_axis:str = "X Axis",y_axis:str = "Y Axis", return_fig = False,**kwargs):
+def histogram(dist,bins:str = None,title:str = "TITLE",x_axis:str = "X Axis",y_axis:str = "Y Axis", return_fig = False, hist_type = "1D",**kwargs):
     if bins != None:
         bins = "auto"
 
-    if return_fig:
-        ax_i = kwargs.get("ax")
-        ax_i.hist(dist,bins, facecolor="b", alpha = 0.5, ec ="black",**kwargs)
+    if hist_type == "1D":
+        if return_fig:
+            ax_i = kwargs.get("ax")
+            ax_i.hist(dist,bins, facecolor="b", alpha = 0.5, ec ="black",**kwargs)
+        
+        else:
+            _n, _bin,_patches = plt.hist(dist,bins, facecolor="b", alpha = 0.5, ec ="black",**kwargs)
     
     else:
-        _n, _bin,_patches = plt.hist(dist,bins, facecolor="b", alpha = 0.5, ec ="black",**kwargs)
+        assert type(dist) != np.ndarray, "dist must be a containing 2 arrays for X, and Y" 
 
-        plt.title(title)
-        plt.xlabel(x_axis)
-        plt.ylabel(y_axis)
+        H, xedges, yedges = np.histogram2d(x = dist[0], y = dist[1], **kwargs)
+
+        fig = plt.figure(figsize=(7, 3))
+        ax = fig.add_subplot(title=title, xlim=xedges[[0, -1]], ylim=yedges[[0, -1]], xlabel = x_axis, ylabel = y_axis)
+        im = NonUniformImage(ax, interpolation='bilinear')
+        xcenters = (xedges[:-1] + xedges[1:]) / 2
+        ycenters = (yedges[:-1] + yedges[1:]) / 2
+        im.set_data(xcenters, ycenters, H)
+        ax.images.append(im)
 
         plt.show()
+        
+        return
+
+    plt.title(title)
+    plt.xlabel(x_axis)
+    plt.ylabel(y_axis)
+
+    plt.show()
 
 
 def boxplot(dist,*,title:str = "",x_axis:str = "",y_axis:str = "",scatter=False,widths=0.5,**kwargs):
