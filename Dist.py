@@ -12,6 +12,9 @@ class dist:
         self.name = name
         match self.type:
             case "gaussian" | "g":
+                assert "mu" in kwargs, "'mu'(Mean) must be provided as an agrument."
+                assert "sigma" in kwargs, "'sigma'(Standard Deviation) must be provided as an argument."
+
                 self.mu = kwargs.get("mu")
                 self.sigma = kwargs.get("sigma")
 
@@ -24,12 +27,21 @@ class dist:
                 self.dist = self.g_dist(self.mu,self.sigma).gdist
             
             case "beta":
+                assert "alpha" in kwargs, "'alpha' must be provided as an agrument."
+                assert "beta" in kwargs, "'beta' must be provided as an argument."
+
                 self.alpha = kwargs.get("alpha")
                 self.beta = kwargs.get("beta")
 
                 self.dist= self.b_dist(self.alpha,self.beta).bdist
             
             case "bivar_gaussian":
+                assert "a_mean" in kwargs, "'a_mean' (Mean of Distribution A) must be provided as an agrument."
+                assert "b_mean" in kwargs, "'b_mean' (Mean of Distribution B) must be provided as an argument."
+                assert "a_var" in kwargs, "'a_var' (Variance of Distribution A) must be provided as an agrument."
+                assert "b_var" in kwargs, "'b_var' (Variance of Distribution B) must be provided as an argument."
+                assert "corr" in kwargs, "'corr' (Correlation Coefficient) must be provided as an argument "
+
                 self.a_mean = kwargs.get("a_mean")
                 self.b_mean = kwargs.get("b_mean")
                 self.a_var = kwargs.get("a_var")
