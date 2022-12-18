@@ -8,9 +8,9 @@ class NotAvailableError(Exception):
 class dist:
     
     def __init__(self,obj = None,type:str = None,name:str = "",**kwargs) -> None:
-        self.type = type
+        self.type = type.strip().lower()
         self.name = name
-        match type:
+        match self.type:
             case "gaussian" | "g":
                 self.mu = kwargs.get("mu")
                 self.sigma = kwargs.get("sigma")
