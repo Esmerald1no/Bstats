@@ -76,7 +76,7 @@ class dist:
         #Prefered sampling method over dist.rvs()
         #Use this method if you are sampling often or using while/for loops
 
-        match dist_type.lower():
+        match dist_type.lower().strip():
             case ("gaussian"|"normal"):
                 return st.norm.rvs(dist_params.get("mu"), dist_params.get("sigma"), size = size)
             case "beta":
