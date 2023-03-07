@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=67.5.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Bstats_Esmerald1no"
+version = "0.0.1"
+authors = [
+  { name="Bruno Esmeraldo", email="bruno.esmeraldo@yahoo.com.br" },
+]
+description = "A package used to perform basic statistical analysis"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: ",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Esmerald1no/Bstats"
+"Bug Tracker" = "https://github.com/Esmerald1no/Bstats/issues"

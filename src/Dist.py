@@ -5,6 +5,10 @@ class NotAvailableError(Exception):
     """Raised when using an unsupported function on a Continuous Distrinution"""
     pass
 
+class MissingParameter(Exception):
+    """Raised when insufficient or incorrect parameters were provided to create a distribution"""
+    pass
+
 class dist:
     
     def __init__(self,obj = None,type:str = None,name:str = "",**kwargs) -> None:
@@ -12,8 +16,8 @@ class dist:
         self.name = name
         match self.type:
             case "gaussian" | "g":
-                assert "mu" in kwargs, "'mu'(Mean) must be provided as an agrument."
-                assert "sigma" in kwargs, "'sigma'(Standard Deviation) must be provided as an argument."
+                if "mu" not in kwargs: raise MissingParameter("'mu'(Mean) must be provided as an agrument.")
+                if "sigma" not in kwargs: raise MissingParameter("'sigma'(Standard Deviation) must be provided as an argument.")
 
                 self.mu = kwargs.get("mu")
                 self.sigma = kwargs.get("sigma")
@@ -27,8 +31,8 @@ class dist:
                 self.dist = self.g_dist(self.mu,self.sigma).gdist
             
             case "beta":
-                assert "alpha" in kwargs, "'alpha' must be provided as an agrument."
-                assert "beta" in kwargs, "'beta' must be provided as an argument."
+                if "alpha" not in kwargs: raise MissingParameter ("'alpha' must be provided as an agrument.")
+                if "beta" not in kwargs: raise MissingParameter("'beta' must be provided as an argument.")
 
                 self.alpha = kwargs.get("alpha")
                 self.beta = kwargs.get("beta")
@@ -36,11 +40,11 @@ class dist:
                 self.dist= self.b_dist(self.alpha,self.beta).bdist
             
             case "bivar_gaussian":
-                assert "a_mean" in kwargs, "'a_mean' (Mean of Distribution A) must be provided as an agrument."
-                assert "b_mean" in kwargs, "'b_mean' (Mean of Distribution B) must be provided as an argument."
-                assert "a_var" in kwargs, "'a_var' (Variance of Distribution A) must be provided as an agrument."
-                assert "b_var" in kwargs, "'b_var' (Variance of Distribution B) must be provided as an argument."
-                assert "corr" in kwargs, "'corr' (Correlation Coefficient) must be provided as an argument "
+                if "a_mean" not in kwargs: raise MissingParameter("'a_mean' (Mean of Distribution A) must be provided as an agrument.")
+                if "b_mean" not in kwargs: raise MissingParameter("'b_mean' (Mean of Distribution B) must be provided as an argument.")
+                if "a_var" not in kwargs: raise MissingParameter("'a_var' (Variance of Distribution A) must be provided as an agrument.")
+                if "b_var" not in kwargs: raise MissingParameter("'b_var' (Variance of Distribution B) must be provided as an argument.")
+                if "corr" not in kwargs: raise MissingParameter("'corr' (Correlation Coefficient) must be provided as an argument ")
 
                 self.a_mean = kwargs.get("a_mean")
                 self.b_mean = kwargs.get("b_mean")
@@ -51,6 +55,8 @@ class dist:
                 self.dist = self.bivar_g_dist(self.a_mean,self.b_mean,self.a_var,self.b_var,self.corr).bivar_gdist
 
             case "paired":
+                if "a" or "b" not in kwargs: raise MissingParameter("You must provide two distributions('a' and 'b') to make a Paired Distribution ")
+                
                 a = kwargs.get("a")
                 b = kwargs.get("b")
 
